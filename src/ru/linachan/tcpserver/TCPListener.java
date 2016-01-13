@@ -19,7 +19,12 @@ public class TCPListener extends Thread {
 
     private static Logger logger = LoggerFactory.getLogger(TCPListener.class);
 
-    public TCPListener(YggdrasilCore core, ThreadGroup threadGroup, Integer listenPort, TCPService service) throws IOException{
+    public TCPListener(
+        YggdrasilCore core,
+        ThreadGroup threadGroup,
+        Integer listenPort,
+        TCPService service
+    ) throws IOException{
         super(threadGroup, "TCPListener{" + listenPort + "}");
         this.core = core;
         this.service = service;
@@ -28,7 +33,7 @@ public class TCPListener extends Thread {
         serviceSocket.setSoTimeout(2000);
     }
 
-    public void pleaseStop() {
+    public void gracefullyShutdown() {
         isRunning = false;
         interrupt();
     }
@@ -38,9 +43,10 @@ public class TCPListener extends Thread {
             try {
                 Socket clientConnection = serviceSocket.accept();
 
-                core.getManager(YggdrasilPluginManager.class).get(TCPServerPlugin.class).getConnectionManager().addConnection(
-                        clientConnection, service
-                );
+                core.getManager(YggdrasilPluginManager.class)
+                    .get(TCPServerPlugin.class)
+                    .getConnectionManager()
+                    .addConnection(clientConnection, service);
             } catch (SocketTimeoutException ignored) {
             } catch (IOException e) {
                 logger.error("Unable to handle client connection", e);

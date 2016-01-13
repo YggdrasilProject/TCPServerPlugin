@@ -35,7 +35,10 @@ public class TCPConnection extends Thread {
         } catch (IOException e) {
             logger.error("Unable to process connection", e);
         } finally {
-            core.getManager(YggdrasilPluginManager.class).get(TCPServerPlugin.class).getConnectionManager().endConnection();
+            core.getManager(YggdrasilPluginManager.class)
+                .get(TCPServerPlugin.class)
+                .getConnectionManager()
+                .endConnection();
         }
     }
 }

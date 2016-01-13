@@ -56,7 +56,7 @@ public class TCPServerPlugin extends YggdrasilPlugin {
         if (services.containsKey(servicePort)) {
             TCPListener serviceListener = services.get(servicePort);
 
-            serviceListener.pleaseStop();
+            serviceListener.gracefullyShutdown();
             services.remove(servicePort);
         }
     }
